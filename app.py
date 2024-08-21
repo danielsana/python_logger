@@ -10,6 +10,16 @@ app = Flask(__name__)
 # above key is used to encrypt use session
 app.secret_key = '1_@Ma8vU!_qRb_*A'
 
+# create a logger
+import logging
+
+from logging.handlers import RotatingFileHandler
+handler = RotatingFileHandler('error.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.DEBUG)
+formatter= logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+)
+
 
 @app.route('/signin',  methods= ['POST','GET'])
 def signin():
@@ -41,7 +51,6 @@ def signin():
         return render_template('signin.html')
     
 
-
 @app.route('/')
 def home():
     # Here we check if userole is in session.
@@ -68,7 +77,6 @@ def add():
                 message_title = request.form['message_title']
                 message_body = request.form['message_body']
                 
-
                 # we now save our message_title, message_body to database
                 connection = pymysql.connect(host='localhost', user='root', password='',
                                             database='CyberTestSystem')
